@@ -115,4 +115,15 @@ class IndexPipeline(object):
                             'ReleaseDate': release_date
                         })
 
-                    
+                    if 'price_overview' in api_data:
+                        price_overview = api_data['price_overview']
+                        if price_overview:
+                            item['db'].table('AppsPrices').insert({
+                                'AppID': appid,
+                                'Country': 'China',
+                                'PriceFinal': price_overview['final'],
+                                'PriceInitial': price_overview['initial'],
+                                'PriceDiscount': price_overview['discount_percent'],
+                                'DisplayCountryName': '中国',
+                                'DisplayCountrySymbol': '元'
+                            })

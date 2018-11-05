@@ -34,7 +34,7 @@ class GameInfosSpider(scrapy.Spider):
                 yield Request(link, meta={'appid': appid, 'db': db},
                               callback=self.parse_info)
 
-                yield Request('https://store.steampowered.com/api/appdetails?appids=' + appid, meta={'appid': appid, 'db': db},
+                yield Request('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=cn', meta={'appid': appid, 'db': db},
                               callback=self.parse_info_api)
 
         for next in response.css('#search_result_container > div.search_pagination > div.search_pagination_right > a.pagebtn::attr(href)'):
