@@ -47,6 +47,7 @@ class NewsYysSpider(scrapy.Spider):
                 else:
                     db.table('News').insert({
                         'Title': yys_title,
+                        'NewsID': item['id'],
                         'Author': yys_author,
                         'Description': yys_description,
                         'Image': yys_image,
@@ -58,6 +59,7 @@ class NewsYysSpider(scrapy.Spider):
             else:
                 db.table('News').insert({
                     'Title': yys_title,
+                    'NewsID': item['id'],
                     'Author': yys_author,
                     'Description': yys_description,
                     'Image': yys_image,
