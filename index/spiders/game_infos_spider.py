@@ -7,7 +7,7 @@ from orator import DatabaseManager
 class GameInfosSpider(scrapy.Spider):
     name = "game_infos"
     start_urls = [
-        'https://store.steampowered.com/search/?sort_by=Released_DESC&tags=-1&category1=998',
+        'https://store.steampowered.com/search/?sort_by=Released_DESC&tags=-1&category1=998&page=1',
     ]
 
     def parse(self, response):
@@ -26,20 +26,19 @@ class GameInfosSpider(scrapy.Spider):
 
         db = DatabaseManager(config)
 
+        total_page = response.css('#search_result_container > div.search_pagination > div.search_pagination_right > a:nth-child(3)::text').extract_first()
         for element in response.css('.search_result_row'):
             if element is not None:
                 link = element.css('a::attr(href)').extract_first()
                 appid = element.css('a::attr(data-ds-appid)').extract_first()
-
                 yield Request(link, meta={'appid': appid, 'db': db},
-                              callback=self.parse_info)
+                            callback=self.parse_info)
 
                 yield Request('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=cn', meta={'appid': appid, 'db': db},
-                              callback=self.parse_info_api)
+                            callback=self.parse_info_api)
 
-        for next in response.css('#search_result_container > div.search_pagination > div.search_pagination_right > a.pagebtn::attr(href)'):
-            if next is not None:
-                yield response.follow(next, callback=self.parse)
+        for next in range(1, int(total_page)):
+            yield response.follow('https://store.steampowered.com/search/?sort_by=Released_DESC&tags=-1&category1=998&page=' + str(next), callback=self.parse)
 
     def parse_info(self, response):
         yield {
