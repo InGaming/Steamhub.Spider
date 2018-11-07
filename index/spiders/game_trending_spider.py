@@ -30,8 +30,12 @@ class GameTrending(scrapy.Spider):
         datetime_utc_plus8 = datetime.datetime.utcnow() + datetime.timedelta(hours=+8)
         datetime_parse = datetime_utc_plus8.strftime('%Y-%m-%d %H:%M:%S')
         for element in response.css('.player_count_row'):
-          now = element.css('td:nth-child(1) > span::text').extract_first()
-          total = element.css('td:nth-child(2) > span::text').extract_first()
+          now_split = element.css('td:nth-child(1) > span::text').extract_first()
+          now_array = now_split.split(',')
+          now = now_array[0] + now_array[1]
+          total_split = element.css('td:nth-child(2) > span::text').extract_first()
+          total_array = total_split.split(',')
+          total = total_array[0] + total_array[1]
           title = element.css('td:nth-child(4) > a::text').extract_first()
           link = element.css('td:nth-child(4) > a::attr(href)').extract_first()
           appid = re.search('-?[1-9]\d*',link).group(0)
