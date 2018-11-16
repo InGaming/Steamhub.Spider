@@ -97,10 +97,16 @@ class IndexPipeline(object):
                         })
 
                     if 'platforms' in api_data:
-                        chunk_platforms = numpy.vstack(api_data['platforms'])
-                        platforms_array = numpy.concatenate(chunk_platforms)
-                        platforms_str = '|'
-                        platforms = platforms_str.join(platforms_array)
+                        platform_linux = ''
+                        platform_windows = ''
+                        platform_mac = ''
+                        if api_data['platforms']['windows']:
+                            platform_windows = 'windows|'
+                        if api_data['platforms']['mac']:
+                            platform_mac = 'mac|'
+                        if api_data['platforms']['linux']:
+                            platform_linux = 'mac|'
+                        platforms = platform_mac + platform_windows + platform_linux
                         item['db'].table('Apps').where('AppID', appid).update({
                             'Platforms': platforms
                         })
