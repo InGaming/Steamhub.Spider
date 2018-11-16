@@ -44,6 +44,7 @@ class GameInfosSpider(scrapy.Spider):
         yield {
             'db': response.meta['db'],
             'appid': response.meta['appid'],
+            'percentage': response.css('.user_reviews_summary_bar .summary_section .game_review_summary::attr(data-tooltip-text)').extract_first(),
             'review_title': response.css('.user_reviews_summary_bar .summary_section .game_review_summary::text').extract_first(),
             'review_people': response.css('.user_reviews_summary_bar .summary_section span:nth-child(3)::text').extract_first(),
             'tag': response.css('.glance_tags a::text').extract(),

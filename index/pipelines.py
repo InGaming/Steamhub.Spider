@@ -17,10 +17,12 @@ class IndexPipeline(object):
                 review_people_array = re.findall(r'\d+', item['review_people'])
                 review_people = review_people_array[0]+review_people_array[1]
                 review_title = item['review_title']
+                percentage = re.findall(r'\d+%', item['percentage'])[0]
                 select_data = item['db'].table('AppsReviews').where({
                     'AppID': appid,
                     'ReviewTitle': review_title,
-                    'ReviewPeople': review_people
+                    'ReviewPeople': review_people,
+                    'Percentage': percentage
                 }).first()
                 if select_data:
                     if select_data['ReviewTitle'] == review_title and select_data['ReviewPeople'] == review_people:
@@ -29,13 +31,15 @@ class IndexPipeline(object):
                         item['db'].table('AppsReviews').insert({
                             'AppID': appid,
                             'ReviewTitle': review_title,
-                            'ReviewPeople': review_people
+                            'ReviewPeople': review_people,
+                            'Percentage': percentage
                         })
                 else:
                     item['db'].table('AppsReviews').insert({
                         'AppID': appid,
                         'ReviewTitle': review_title,
-                        'ReviewPeople': review_people
+                        'ReviewPeople': review_people,
+                        'Percentage': percentage
                     })
             else:
                 pass
