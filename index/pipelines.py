@@ -5,6 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import numpy
+import re
 
 class IndexPipeline(object):
 
@@ -13,30 +14,29 @@ class IndexPipeline(object):
 
         if 'review_title' in item:
             if item['review_title'] and item['review_people']:
-                chunk = numpy.c_[item['review_title'], item['review_people']]
-                for data in chunk:
-                    review_title = data[0]
-                    review_people = data[1]
-                    select_data = item['db'].table('AppsReviews').where({
-                        'AppID': appid,
-                        'ReviewTitle': review_title,
-                        'ReviewPeople': review_people
-                    }).first()
-                    if select_data:
-                        if select_data['ReviewTitle'] == review_title and select_data['ReviewPeople'] == review_people:
-                            pass
-                        else:
-                            item['db'].table('AppsReviews').insert({
-                                'AppID': appid,
-                                'ReviewTitle': review_title,
-                                'ReviewPeople': review_people
-                            })
+                review_people_array = re.findall(r'\d+', item['review_people'])
+                review_people = review_people_array[0]+review_people_array[1]
+                review_title = item['review_title']
+                select_data = item['db'].table('AppsReviews').where({
+                    'AppID': appid,
+                    'ReviewTitle': review_title,
+                    'ReviewPeople': review_people
+                }).first()
+                if select_data:
+                    if select_data['ReviewTitle'] == review_title and select_data['ReviewPeople'] == review_people:
+                        pass
                     else:
                         item['db'].table('AppsReviews').insert({
                             'AppID': appid,
                             'ReviewTitle': review_title,
                             'ReviewPeople': review_people
                         })
+                else:
+                    item['db'].table('AppsReviews').insert({
+                        'AppID': appid,
+                        'ReviewTitle': review_title,
+                        'ReviewPeople': review_people
+                    })
             else:
                 pass
 
