@@ -1,3 +1,5 @@
 index/__pycache__
+index/__init__.pyc
 index/settings.py
+index/settings.pyc
 index/spiders/__pycache__
