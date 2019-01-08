@@ -182,7 +182,15 @@ class IndexPipeline(object):
                             'appid': appid,
                             'final': price_overview['final'],
                         }).first()
-                        
+
+                        if price_overview:
+                            item['db'].table('game_lists').where('appid', appid).update({
+                                "price_final": price_overview['final'],
+                                "price_initial": price_overview['initial'],
+                                'price_discount': price_overview['discount_percent'],
+                                'updated_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                            })
+
                         if select_data:
                             pass
 

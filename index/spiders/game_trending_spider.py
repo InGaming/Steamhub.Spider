@@ -29,7 +29,7 @@ class GameTrending(scrapy.Spider):
 
         db = DatabaseManager(config)
         datetime_utc_plus8 = datetime.datetime.utcnow() + datetime.timedelta(hours=+8)
-        datetime_parse = datetime_utc_plus8.strftime('%Y-%m-%d %H:%M:%S')
+        datetime_parse = datetime_utc_plus8.strftime('%Y-%m-%d %H:%M:00')
         for element in response.css('.player_count_row'):
           now_split = element.css('td:nth-child(1) > span::text').extract_first()
           now_array = now_split.split(',')
@@ -40,27 +40,27 @@ class GameTrending(scrapy.Spider):
           title = element.css('td:nth-child(4) > a::text').extract_first()
           link = element.css('td:nth-child(4) > a::attr(href)').extract_first()
           appid = re.search('-?[1-9]\d*',link).group(0)
-          select_data = db.table('Trending').where({
-              'AppID': appid,
-              'Title': title
-          }).order_by('Created', 'desc').first()
+          select_data = db.table('game_hots').where({
+              'appid': appid,
+              'name': title
+          }).order_by('created_at', 'desc').first()
 
           if select_data:
-            if now == select_data['Now'] and total == select_data['Total']:
+            if now == select_data['current'] and total == select_data['total']:
               pass
             else:
-              db.table('Trending').insert({
-                  'AppID': appid,
-                  'Title': title,
-                  'Total': str(total),
-                  'Now': str(now),
-                  'Created': datetime_parse
+              db.table('game_hots').insert({
+                  'appid': appid,
+                  'name': title,
+                  'total': str(total),
+                  'current': str(now),
+                  'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:00')
               })
           else:
-            db.table('Trending').insert({
-                'AppID': appid,
-                'Title': title,
-                'Total': total,
-                'Now': now,
-                'Created': datetime_parse
+            db.table('game_hots').insert({
+                'appid': appid,
+                'name': title,
+                'total': total,
+                'current': now,
+                'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:00')
             })
