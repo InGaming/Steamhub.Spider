@@ -29,7 +29,7 @@ class GameTrending(scrapy.Spider):
 
         db = DatabaseManager(config)
         datetime_utc_plus8 = datetime.datetime.utcnow() + datetime.timedelta(hours=+8)
-        datetime_parse = datetime_utc_plus8.strftime('%Y-%m-%d %H:%M:00')
+        datetime_parse = datetime_utc_plus8.strftime('%Y-%m-%d %H:%M:%S')
         for element in response.css('.player_count_row'):
           now_split = element.css('td:nth-child(1) > span::text').extract_first()
           now_array = now_split.split(',')
@@ -54,7 +54,7 @@ class GameTrending(scrapy.Spider):
                   'name': title,
                   'total': str(total),
                   'current': str(now),
-                  'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:00')
+                  'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
               })
           else:
             db.table('game_hots').insert({
@@ -62,5 +62,5 @@ class GameTrending(scrapy.Spider):
                 'name': title,
                 'total': total,
                 'current': now,
-                'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:00')
+                'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             })
