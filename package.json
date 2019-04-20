@@ -1,0 +1,14 @@
+{
+  "name": "steamhub-spider",
+  "version": "0.0.1",
+  "description": "steamhub spider framework",
+  "main": "index.js",
+  "repository": "https://github.com/InGaming/Steamhub.Spider.git",
+  "author": "AGD <agdholo@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "crawler": "^1.2.1",
+    "lowdb": "^1.0.0",
+    "socks-proxy-agent": "^4.0.2"
+  }
+}
