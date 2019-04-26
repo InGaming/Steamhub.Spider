@@ -6,6 +6,9 @@
   "repository": "https://github.com/InGaming/Steamhub.Spider.git",
   "author": "AGD <agdholo@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "popular_new": "node --experimental-modules  spider/popular_new.mjs"
+  },
   "dependencies": {
     "crawler": "^1.2.1",
     "lowdb": "^1.0.0",
