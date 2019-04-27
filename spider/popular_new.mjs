@@ -30,7 +30,7 @@ class popular_new {
               data.push({ id: index, appid: parseInt(appid), create_at: date })
             }
           })
-          lowdb.push('./db/db.json', 'popular_new', data)
+          lowdb.push('./db/popular_new.json', 'popular_new', data)
         }
         done()
       }
