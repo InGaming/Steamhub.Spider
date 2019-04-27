@@ -23,14 +23,14 @@ class popular_new {
         } else {
           const date = Date.now()
           const $ = res.$
+          let data = []
           $('#search_result_container > div > a').each(function (index, element) {
             let appid = $(element).attr('data-ds-appid')
             if (self.isNumeric(appid)) {
-              
-              let data = { id: index, appid: parseInt(appid), create_at: date }
-              lowdb.push('./db/db.json', 'popular_new', data)
+              data.push({ id: index, appid: parseInt(appid), create_at: date })
             }
           })
+          lowdb.push('./db/db.json', 'popular_new', data)
         }
         done()
       }
