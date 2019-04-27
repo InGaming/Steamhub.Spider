@@ -1,14 +1,14 @@
 import crawler from 'crawler'
-import { db as lowdb} from '../lib/db.mjs'
+import { db as lowdb } from '../lib/db.mjs'
 
 
 class popular_new {
-  async spider() {
+  spider() {
     const self = this
     
     const c = new crawler({
       rateLimit: 1000
-    });
+    })
 
 
     // Queue URLs with custom callbacks & parameters
@@ -19,12 +19,12 @@ class popular_new {
       // The global callback won't be called
       callback: function (error, res, done) {
         if (error) {
-          console.log(error);
+          console.log(error)
         } else {
           const date = Date.now()
           const $ = res.$
           $('#search_result_container > div > a').each(function (index, element) {
-            let appid = $(element).attr('data-ds-appid');
+            let appid = $(element).attr('data-ds-appid')
             if (self.isNumeric(appid)) {
               
               let data = { id: index, appid: parseInt(appid), create_at: date }
@@ -32,12 +32,12 @@ class popular_new {
             }
           })
         }
-        done();
+        done()
       }
-    }]);
+    }])
   }
   isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+    return !isNaN(parseFloat(n)) && isFinite(n)
   }
 }
 

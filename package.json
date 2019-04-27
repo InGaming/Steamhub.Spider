@@ -7,11 +7,15 @@
   "author": "AGD <agdholo@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint --fix --ext .js,.mjs --ignore-path .gitignore .",
     "popular_new": "node --experimental-modules  spider/popular_new.mjs"
   },
   "dependencies": {
     "crawler": "^1.2.1",
     "lowdb": "^1.0.0",
     "socks-proxy-agent": "^4.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
   }
 }
